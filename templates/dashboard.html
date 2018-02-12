@@ -1,0 +1,137 @@
+{% extends "index.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+  {{ super() }}
+<style>
+#customers {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#customers td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers tr:hover {background-color: #ddd;}
+#customers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+#customer {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+#customer td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+#customer tr:nth-child(even){background-color: #f2f2f2;}
+#customer tr:hover {background-color: #ddd;}
+#customer th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+
+{% endblock %}
+  <body>
+{% block content %}
+    <!-- Page Content -->
+    <div class="container">
+        <br><br>
+                {% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+               <p style="color:red;">{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+           <h2>Upload data</h2>
+                    <hr>
+
+<div class="container well">
+   <form id="Upload" enctype="multipart/form-data" method="post" action="/upload">
+           <label>Select Algorithm</label><br>
+      <select name="algo">
+        <option value="knn">Knn(1nn)</option>
+        <option value="decision_tree">Decision Tree</option>        
+    </select>
+  <br>
+  <br>
+	<div class="form-group">
+      <label>Upload Training Data(.csv)</label>
+      <input type="file" class="form-control" id="training_file" name="training_file">
+  </div>
+  <div class="form-group">
+      <label>Upload Test Data(.csv)</label>
+      <input type="file" class="form-control" id="test_file" name="test_file">
+  </div>
+  <div>
+    <a href="static/template.PNG">Template</a>
+  </div>
+  <br>
+	<div class="pull-right">
+     <label style="color:red">{{ upload_err if upload_err != None }} </label>
+     <input class="btn btn-primary" style="background-color:green;" type="submit" value="Start">
+	</div>
+  </form>
+</div>
+          <br><br>
+          {% if render_result %}
+          <h2>Results</h2>
+           <hr>
+            <!--<h5>Data results</h5> -->
+                  <table id="customers">
+              <thread>
+                {% for h in header %}
+                <th>{{ h }}</th>
+                {% endfor %}
+              </thread>
+              {% for row in data %}
+              <tr>
+                {% for element in row.split(",") %}
+                <td>{{ element }} </td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+          </table>
+        <br>
+        
+        
+        <!--
+         <h5>Testing results</h5>
+            <table id="customer">
+              <tr>
+                     <th> Class</th>
+                   <th>Result</th>
+              </tr>
+                <tr>
+                      <td>Iris-setosa</td>
+                   <td>0.3</td>
+
+                </tr>
+                     <tr>
+                         <td>Iris-virginica</td>
+                   <td>0.5</td>
+
+                </tr>
+            </table>
+            -->
+         <div class="pull-right">
+           <a href="{{ download_url }}">Download</a>
+	       </div>        
+         
+        {% endif %}
+
+	</div>
+    </div>
+    <!-- /.container -->
+{% endblock %}
